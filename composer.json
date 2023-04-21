@@ -1,0 +1,17 @@
+{
+    "name": "agentfire/test",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AgentFire\\Plugin\\": "src"
+        }
+    },
+    "require": {
+        "twig/twig": "^3.5",
+        "php-curl-class/php-curl-class": "^9.14",
+        "symfony/polyfill-ctype": "^1.27",
+        "symfony/asset": "^6.2",
+        "symfony/finder": "^6.2"
+    }
+}

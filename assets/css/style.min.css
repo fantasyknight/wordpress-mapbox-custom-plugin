@@ -1,0 +1,137 @@
+.mapboxgl-canvas {
+  display: block;
+  position: relative;
+  min-height: 400px;
+  max-height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  overflow: hidden;
+}
+
+.mapbox-sidebar {
+  height: 400px;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+.mapbox-sidebar .tag-items {
+  height: 270px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.mapbox-sidebar .tag-item {
+  cursor: pointer;
+}
+.mapbox-sidebar .tag-item .form-check-input {
+  width: 12px;
+  height: 12px;
+  margin-top: 0.2rem;
+  margin-left: -1.2rem;
+}
+.mapbox-sidebar .tag-item .form-check-label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  font-size: 12px;
+  overflow: hidden;
+}
+.mapbox-sidebar .switcher {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+.mapbox-sidebar .switcher .form-check-label {
+  font-size: 14px;
+}
+.mapbox-sidebar .nice-scrollbar {
+  overflow: hidden auto;
+}
+.mapbox-sidebar .nice-scrollbar::-webkit-outer-spin-button, .mapbox-sidebar .nice-scrollbar::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.mapbox-sidebar .nice-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 81px;
+}
+.mapbox-sidebar .nice-scrollbar::-webkit-scrollbar-thumb {
+  position: relative;
+  margin-right: -2rem;
+  background: #ccc;
+  border-radius: 10px;
+  opacity: 0.15;
+  cursor: pointer;
+  -webkit-transform: translateX(2rem);
+          transform: translateX(2rem);
+}
+.mapbox-sidebar .text-overflow {
+  max-width: 5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mapbox-sidebar #search-wrapper {
+  z-index: 10;
+}
+.mapbox-sidebar #search-list {
+  display: none;
+  position: absolute;
+  width: 100%;
+  max-height: 140px;
+  padding: 0.5rem 0;
+  margin: 0;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: 0;
+  border-radius: 5px;
+  list-style: none;
+  z-index: -1;
+}
+.mapbox-sidebar #search-list li {
+  padding: 0.2rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mapbox-sidebar #search-list li:hover {
+  color: #26c;
+}
+
+.mapboxgl-popup {
+  max-width: none !important;
+}
+
+.mapboxgl-popup-content {
+  padding: 1rem;
+  border-radius: 5px;
+}
+.mapboxgl-popup-content .mapboxgl-popup-close-button {
+  top: -1.2rem;
+  right: -1.2rem;
+  font-size: 1.5rem;
+}
+.mapboxgl-popup-content .mapboxgl-popup-close-button:focus-visible {
+  outline: none;
+}
+.mapboxgl-popup-content .chosen-container {
+  width: 10rem !important;
+}
+.mapboxgl-popup-content .btn {
+  font-size: 12px;
+}
+.mapboxgl-popup-content input {
+  margin-top: 0.1rem;
+  margin-left: 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  line-height: 25px;
+}
+
+.mr-2 {
+  margin-right: 10px !important;
+}
