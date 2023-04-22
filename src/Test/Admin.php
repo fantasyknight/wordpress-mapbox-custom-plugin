@@ -35,7 +35,9 @@ class Admin {
 	}
 
 	public function renderPage() {
-		$fields = acf_get_fields( $this->key );
+		if ( function_exists( 'acf_get_fields' ) ) {
+			$fields = acf_get_fields( $this->key );
+		}
 
         $index = 0;
         foreach( $fields as $field ) {
@@ -119,16 +121,17 @@ class Admin {
 	}
 
 	public function adminLoad() {
-        
-		if ( acf_verify_nonce('options' ) ) {
-			if ( acf_validate_save_post( true ) ) {
-				acf_save_post( 'acf-group_' . $this->slug );
-				wp_redirect( add_query_arg( [ 'message' => '1' ] ) );
-				exit;
+        if ( function_exists( 'acf_verify_nonce' ) ) {
+			if ( acf_verify_nonce('options' ) ) {
+				if ( acf_validate_save_post( true ) ) {
+					acf_save_post( 'acf-group_' . $this->slug );
+					wp_redirect( add_query_arg( [ 'message' => '1' ] ) );
+					exit;
+				}
 			}
+			acf_enqueue_scripts();
+			wp_enqueue_script( 'post' );
 		}
-		acf_enqueue_scripts();
-		wp_enqueue_script( 'post' );
 	}
 
 	/**
