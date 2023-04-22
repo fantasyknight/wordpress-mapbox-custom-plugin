@@ -15,22 +15,22 @@ window.$ = jQuery;
  * 
  */
 MapBox.initialize = function () {
-    mapboxgl.accessToken = $("#map-box-key").val();
+    mapboxgl.accessToken = $("#map-box-key").val(); 
 
     // create a mapbox
-    MapBox.map = new mapboxgl.Map({
-        container: "log-map",
-        style: "mapbox://styles/mapbox/streets-v12",
-        center: [13.405, 52.52],
-        zoom: 13
-    });
-
+        MapBox.map = new mapboxgl.Map({
+            container: "log-map",
+            style: "mapbox://styles/mapbox/streets-v12",
+            center: [13.405, 52.52],
+            zoom: 13
+        });
     // initial settings
     MapBox.apiURL = $('#api-url').val();
     MapBox.infoPopup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false
     });
+
     MapBox.tags = [];
     MapBox.userId = $("#user-id").val();
     MapBox.isLoggedIn = MapBox.userId > 0;
@@ -301,4 +301,4 @@ MapBox.removePopup = function () {
 
 $(document).ready(function () {
     MapBox.initialize();
-});
+})(jQuery);
