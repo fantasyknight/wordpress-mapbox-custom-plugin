@@ -13,7 +13,6 @@ use AgentFire\Plugin\Test\Traits\Singleton;
 
 use WP_REST_Request;
 use WP_REST_Response;
-use WP_REST_Server;
 use WP_Query;
 
 defined( 'ABSPATH' ) or die();
@@ -214,16 +213,16 @@ class Rest {
 	 * [agentfire_test] shortcode
 	 */
 	public function renderMapBox() {
-		$map_box_key = "";
+		$map_box_key = '';
 		if ( function_exists( 'acf_add_local_field_group' ) ) {
-			$map_box_key = get_field( "test_mapbox_token", "acf-group_test-settings" );
+			$map_box_key = get_field( 'test_mapbox_token', 'acf-group_test-settings' );
 		}
 
 		return $this->twig->render(
 			'main.twig',
 			[ 
-				'userID' => get_current_user_id(),
-				'apiURL' => get_site_url() . '/wp-json/' . self::NAMESPACE . self::REST_BASE . '/markers',
+				'userID' 	=> get_current_user_id(),
+				'apiURL' 	=> get_site_url() . '/wp-json/' . self::NAMESPACE . self::REST_BASE . '/markers',
 				'mapBoxKey' => $map_box_key
 			]
 		);
