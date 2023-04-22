@@ -13,6 +13,7 @@ use AgentFire\Plugin\Test\Traits\Singleton;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 use WP_Query;
 
 defined( 'ABSPATH' ) or die();
@@ -44,25 +45,21 @@ class Rest {
 			return sprintf( plugins_url( 'mapbox/assets/%s' ), ltrim( $asset, '/' ) );
 		} ) );
 
-		// add actions and shortcode
-		add_action( 'init', function () {
-			add_action( 'plugins_loaded', Rest::registerRoutes() );
-			add_action( 'plugins_loaded', Rest::registerMakerPostType() );
-			add_shortcode( 'agentfire_test', [ $this, 'renderMapBox' ] );
-		} );
+		add_action( 'init', [Rest::class, 'registerRoutes'] );
+		add_action( 'init', [Rest::class, 'registerMakerPostType'] );
+		add_shortcode( 'agentfire_test', [ $this, 'renderMapBox' ] );
 	}
 
 	/**
 	 * Register endpoints
 	 */
 	public static function registerRoutes() {
-		$user = wp_get_current_user();
 		register_rest_route(
 			self::NAMESPACE , self::REST_BASE . '/markers',
 			[ 
 				'show_in_index' => false,
-				'methods' 		=> [ 'get', 'post' ],
-				'callback' 		=> [ self::class, 'markers' ],
+				'methods' 		=> [ 'GET', 'POST' ],
+				'callback' 		=> [ Rest::class, 'markers' ],
 				'args' 			=> [],
 			]
 		);
@@ -217,11 +214,17 @@ class Rest {
 	 * [agentfire_test] shortcode
 	 */
 	public function renderMapBox() {
+		$map_box_key = "";
+		if ( function_exists( 'acf_add_local_field_group' ) ) {
+			$map_box_key = get_field( "test_mapbox_token", "acf-group_test-settings" );
+		}
+
 		return $this->twig->render(
 			'main.twig',
 			[ 
 				'userID' => get_current_user_id(),
-				'apiURL' => get_site_url() . '/wp-json/' . self::NAMESPACE . self::REST_BASE . '/markers'
+				'apiURL' => get_site_url() . '/wp-json/' . self::NAMESPACE . self::REST_BASE . '/markers',
+				'mapBoxKey' => $map_box_key
 			]
 		);
 	}

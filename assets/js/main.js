@@ -15,7 +15,7 @@ window.$ = jQuery;
  * 
  */
 MapBox.initialize = function () {
-    mapboxgl.accessToken = "pk.eyJ1IjoiY3J3ZGdzIiwiYSI6ImNsNTg3eW1ldzBuM2QzZnFuams1aTVjNncifQ.1c3wrHRyHqS_etRPf8DaVA";
+    mapboxgl.accessToken = $("#map-box-key").val();
 
     // create a mapbox
     MapBox.map = new mapboxgl.Map({
@@ -37,6 +37,7 @@ MapBox.initialize = function () {
     MapBox.markers = [];
     MapBox.searhResults = [];
     MapBox.isPopupOpened = false;
+    MapBox.searchList = [];
 
     MapBox.updateDataByTag();
 
@@ -47,8 +48,10 @@ MapBox.initialize = function () {
     })
     $('#search-input').click(function (event) {
         event.stopPropagation();
-        if (MapBox.searchList.length > 0 && $('#search-input').val().length > 0)
+
+        if (MapBox.searchList.length > 0 && $('#search-input').val() !== '') {
             $("#search-list").attr("style", "display: block");
+        }
     })
 
     MapBox.isLoggedIn && MapBox.map.on('click', MapBox.addMarkerModal);
@@ -94,11 +97,13 @@ MapBox.addMarker = function () {
     // add a marker on the map
     var marker = new mapboxgl.Marker({ color: 'red' });
     marker.setLngLat(MapBox.coordinates).addTo(MapBox.map);
+    MapBox.markers.push(marker);
     MapBox.isPopupOpened = false;
     MapBox.settingPopup.remove();
 
     // save marker
-    MapBox.saveMarkerSettings();
+    const markerDiv = marker.getElement();
+    MapBox.saveMarkerSettings(markerDiv);
 }
 
 /**
@@ -106,22 +111,29 @@ MapBox.addMarker = function () {
  * 
  * @param event
  */
-MapBox.saveMarkerSettings = function (event) {
+MapBox.saveMarkerSettings = function (markerDiv) {
+    let item = {
+        user_id: MapBox.userId,
+        name: $(MapBox.settingPopup._content.querySelector(".marker-name")).val(),
+        tag: $(MapBox.settingPopup._content.querySelector(".marker-tag")).val(),
+        new_tag: $(MapBox.settingPopup._content.querySelector(".new-tag")).val(),
+        lat: MapBox.settingPopup._lngLat.lat,
+        lng: MapBox.settingPopup._lngLat.lng
+    }
+
     $.ajax({
         type: "post",
         url: MapBox.apiURL,
         data: {
-            user_id: MapBox.userId,
-            name: $(MapBox.settingPopup._content.querySelector(".marker-name")).val(),
-            tag: $(MapBox.settingPopup._content.querySelector(".marker-tag")).val(),
-            new_tag: $(MapBox.settingPopup._content.querySelector(".new-tag")).val(),
-            lat: MapBox.settingPopup._lngLat.lat,
-            lng: MapBox.settingPopup._lngLat.lng
+            ...item
         },
         success: function (result) {
             MapBox.updateDataByTag(false);
         }
     })
+
+    markerDiv.addEventListener('mouseenter', () => { MapBox.showPopup(item) });
+    markerDiv.addEventListener('mouseleave', MapBox.removePopup);
 }
 
 /**
@@ -236,8 +248,9 @@ MapBox.updateMarkers = function () {
                 .addTo(MapBox.map);
 
             const markerDiv = marker.getElement();
-            markerDiv.addEventListener('mouseenter', () => marker.togglePopup());
-            markerDiv.addEventListener('mouseleave', () => marker.togglePopup());
+            markerDiv.addEventListener('mouseenter', () => { MapBox.showPopup(item) });
+            markerDiv.addEventListener('mouseleave', MapBox.removePopup);
+
             MapBox.markers.push(marker);
         })
     }

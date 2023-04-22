@@ -19,6 +19,6 @@ class Test
 	public function __construct()
 	{
 		Rest::getInstance();
-		// Admin::getInstance();
+		Admin::getInstance();
 	}
 }
