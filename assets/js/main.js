@@ -15,15 +15,15 @@ window.$ = jQuery;
  * 
  */
 MapBox.initialize = function () {
-    mapboxgl.accessToken = $("#map-box-key").val(); 
+    mapboxgl.accessToken = $('#map-box-key').val();
 
     // create a mapbox
-        MapBox.map = new mapboxgl.Map({
-            container: "log-map",
-            style: "mapbox://styles/mapbox/streets-v12",
-            center: [13.405, 52.52],
-            zoom: 13
-        });
+    MapBox.map = new mapboxgl.Map({
+        container: 'log-map',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [13.405, 52.52],
+        zoom: 13
+    });
     // initial settings
     MapBox.apiURL = $('#api-url').val();
     MapBox.infoPopup = new mapboxgl.Popup({
@@ -32,7 +32,7 @@ MapBox.initialize = function () {
     });
 
     MapBox.tags = [];
-    MapBox.userId = $("#user-id").val();
+    MapBox.userId = $('#user-id').val();
     MapBox.isLoggedIn = MapBox.userId > 0;
     MapBox.markers = [];
     MapBox.searhResults = [];
@@ -44,13 +44,13 @@ MapBox.initialize = function () {
     $('#only-mine').change(MapBox.updateMarkers);
     $('#search-input').on('input', MapBox.searchByName);
     $(document).click(function () {
-        $("#search-list").attr("style", "display: none");
+        $('#search-list').attr('style', 'display: none');
     })
     $('#search-input').click(function (event) {
         event.stopPropagation();
 
         if (MapBox.searchList.length > 0 && $('#search-input').val() !== '') {
-            $("#search-list").attr("style", "display: block");
+            $('#search-list').attr('style', 'display: block');
         }
     })
 
@@ -72,15 +72,15 @@ MapBox.addMarkerModal = function (event) {
             closeOnMove: true
         })
             .setLngLat(MapBox.coordinates)
-            .setHTML($("#marker-setting").html())
+            .setHTML($('#marker-setting').html())
             .addTo(MapBox.map);
 
         MapBox.isPopupOpened = true;
 
         // save/cancel modal actions
-        $(MapBox.settingPopup._content.querySelector(".chosen-select")).chosen();
-        $(MapBox.settingPopup._content.querySelector(".btn-success")).click(MapBox.addMarker);
-        $(MapBox.settingPopup._content.querySelector(".btn-danger")).click(function () {
+        $(MapBox.settingPopup._content.querySelector('.chosen-select')).chosen();
+        $(MapBox.settingPopup._content.querySelector('.btn-success')).click(MapBox.addMarker);
+        $(MapBox.settingPopup._content.querySelector('.btn-danger')).click(function () {
             MapBox.settingPopup.remove();
             MapBox.isPopupOpened = false;
         });
@@ -94,16 +94,23 @@ MapBox.addMarkerModal = function (event) {
  * Add a marker
  */
 MapBox.addMarker = function () {
-    // add a marker on the map
-    var marker = new mapboxgl.Marker({ color: 'red' });
-    marker.setLngLat(MapBox.coordinates).addTo(MapBox.map);
-    MapBox.markers.push(marker);
-    MapBox.isPopupOpened = false;
-    MapBox.settingPopup.remove();
+    let name = $(MapBox.settingPopup._content.querySelector('.marker-name')).val();
+    let tag = $(MapBox.settingPopup._content.querySelector('.marker-tag')).val();
+    let newTag = $(MapBox.settingPopup._content.querySelector('.new-tag')).val();
 
-    // save marker
-    const markerDiv = marker.getElement();
-    MapBox.saveMarkerSettings(markerDiv);
+    if (name !== '' && (tag.length > 0 || newTag !== '')) {
+        // add a marker on the map
+        var marker = new mapboxgl.Marker({ color: 'red' });
+        marker.setLngLat(MapBox.coordinates).addTo(MapBox.map);
+        MapBox.markers.push(marker);
+        MapBox.isPopupOpened = false;
+
+        MapBox.settingPopup.remove();
+
+        // save marker
+        const markerDiv = marker.getElement();
+        MapBox.saveMarkerSettings(markerDiv);
+    }
 }
 
 /**
@@ -114,15 +121,15 @@ MapBox.addMarker = function () {
 MapBox.saveMarkerSettings = function (markerDiv) {
     let item = {
         user_id: MapBox.userId,
-        name: $(MapBox.settingPopup._content.querySelector(".marker-name")).val(),
-        tag: $(MapBox.settingPopup._content.querySelector(".marker-tag")).val(),
-        new_tag: $(MapBox.settingPopup._content.querySelector(".new-tag")).val(),
+        name: $(MapBox.settingPopup._content.querySelector('.marker-name')).val(),
+        tag: $(MapBox.settingPopup._content.querySelector('.marker-tag')).val(),
+        new_tag: $(MapBox.settingPopup._content.querySelector('.new-tag')).val(),
         lat: MapBox.settingPopup._lngLat.lat,
         lng: MapBox.settingPopup._lngLat.lng
     }
 
     $.ajax({
-        type: "post",
+        type: 'post',
         url: MapBox.apiURL,
         data: {
             ...item
@@ -145,6 +152,8 @@ MapBox.updateDataByTag = function (updateMarkers = true) {
         url: MapBox.apiURL,
         data: { tag: MapBox.tags, user_id: MapBox.userId },
         success: function (result) {
+            console.log("Results are", result);
+
             MapBox.myMakers = result.my_markers;
             MapBox.otherMarkers = result.other_markers;
 
@@ -156,20 +165,20 @@ MapBox.updateDataByTag = function (updateMarkers = true) {
 
             $('#marker-setting select').html(options);
 
-            var sidebarTags = "";
+            var sidebarTags = '';
 
             // update sidebar
             for (let i = 0; i < result.tags.length; i++) {
                 let tag = result.tags[i];
-                sidebarTags = sidebarTags + `<div class="tag-item form-check">
-                    <input class="form-check-input" type="checkbox" value="" ${MapBox.tags.includes(tag.slug) ? "checked" : ""} id="${result.tags[i].slug}">
-                    <label class="form-check-label" for="${tag.slug}" title="${tag.name} ( ${tag.count} )">
+                sidebarTags = sidebarTags + `<div class='tag-item form-check'>
+                    <input class='form-check-input' type='checkbox' value='' ${MapBox.tags.includes(tag.slug) ? 'checked' : ''} id='${result.tags[i].slug}'>
+                    <label class='form-check-label' for='${tag.slug}' title='${tag.name} ( ${tag.count} )'>
                     ${tag.name} ( ${tag.count} )
                     </label>
                 </div>`;
             }
 
-            $("#sidebar-tags").html(sidebarTags);
+            $('#sidebar-tags').html(sidebarTags);
 
             $('#sidebar-tags .form-check-input').change(function (event) {
                 let value = $(this).attr('id');
@@ -194,7 +203,7 @@ MapBox.updateDataByTag = function (updateMarkers = true) {
  * 
  */
 MapBox.searchByName = function () {
-    let search = $("#search-input").val();
+    let search = $('#search-input').val();
     let isResult = false;
 
     if (search.length > 0) {
@@ -202,23 +211,23 @@ MapBox.searchByName = function () {
             url: MapBox.apiURL,
             data: { user_id: MapBox.userId, search: search },
             success: function (result) {
-                let searchList = "";
+                let searchList = '';
                 MapBox.searchList = [];
                 if (result.my_markers.length + result.other_markers.length > 0) isResult = true;
 
                 [...result.my_markers, ...result.other_markers].forEach(item => {
                     MapBox.searchList.push(item);
-                    searchList = searchList + `<li lng="${item.lng}" lat="${item.lat}">${item.name}</li>`
+                    searchList = searchList + `<li lng='${item.lng}' lat='${item.lat}'>${item.name}</li>`
                 })
 
                 // update search list
-                $("#search-list").html(searchList);
-                $("#search-list").attr("style", isResult ? "display: block" : "display: none");
-                $("#search-list li").click(MapBox.moveTo);
+                $('#search-list').html(searchList);
+                $('#search-list').attr('style', isResult ? 'display: block' : 'display: none');
+                $('#search-list li').click(MapBox.moveTo);
             }
         });
     } else {
-        $("#search-list").attr("style", "display: none");
+        $('#search-list').attr('style', 'display: none');
     }
 }
 
@@ -261,7 +270,7 @@ MapBox.updateMarkers = function () {
  * 
  */
 MapBox.moveTo = function (event) {
-    $("#search-input").val($(event.target).html());
+    $('#search-input').val($(event.target).html());
 
     lng = parseFloat($(event.target).attr('lng'));
     lat = parseFloat($(event.target).attr('lat'));
@@ -273,14 +282,14 @@ MapBox.moveTo = function (event) {
  * 
  */
 MapBox.showPopup = function (item) {
-    $("#marker-name-info").html(item.name);
-    $("#marker-tag-info").html(item.tag);
-    $("#marker-lng-info").html(parseFloat(item.lng).toFixed(2));
-    $("#marker-lat-info").html(parseFloat(item.lat).toFixed(2));
+    $('#marker-name-info').html(item.name);
+    $('#marker-tag-info').html(item.tag.toString());
+    $('#marker-lng-info').html(parseFloat(item.lng).toFixed(2));
+    $('#marker-lat-info').html(parseFloat(item.lat).toFixed(2));
 
     MapBox.popup = new mapboxgl.Popup({ closeButton: false })
         .setLngLat([item.lng, item.lat])
-        .setHTML($("#marker-info").html())
+        .setHTML($('#marker-info').html())
         .addTo(MapBox.map);
 }
 
@@ -301,4 +310,4 @@ MapBox.removePopup = function () {
 
 $(document).ready(function () {
     MapBox.initialize();
-})(jQuery);
+});

@@ -43,7 +43,7 @@ class Rest {
 		$this->twig->addFunction( new TwigFunction( 'asset', function ($asset) {
 			return sprintf( plugins_url( 'mapbox/assets/%s' ), ltrim( $asset, '/' ) );
 		} ) );
-
+		
 		add_action( 'init', [Rest::class, 'registerRoutes'] );
 		add_action( 'init', [Rest::class, 'registerMakerPostType'] );
 		add_shortcode( 'agentfire_test', [ $this, 'renderMapBox' ] );
@@ -112,7 +112,6 @@ class Rest {
 	 * 
 	 */
 	public static function markers( WP_REST_Request $request ) {
-
 		global $wpdb;
 
 		// add a new marker
@@ -161,9 +160,11 @@ class Rest {
 			}
 
 			// filter markers by tag
+			$search = $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '';
 			$markers = new WP_Query(
 				[ 
 					'post_type' => 'marker',
+					's'			=> $request->get_param( 'search' ),
 					'tax_query' => [ 
 						$request->get_param( 'tag' ) ? $tag_filter : ''
 					]
@@ -179,17 +180,15 @@ class Rest {
 				$item = [ 
 					'name' 	=> $marker->post_title,
 					'slug' 	=> $marker->post_name,
-					'tag' 	=> $tag ? $tag[0] : null,
+					'tag' 	=> $tag ? $tag : [],
 					'lng' 	=> $meta['lng'][0],
 					'lat' 	=> $meta['lat'][0]
 				];
 
-				if ( ! $request->get_param( 'search' ) || preg_match( '/' . $request->get_param( 'search' ) . '/i', $marker->post_title ) ) {
-					if ( $marker->post_author == $request->get_param( 'user_id' ) ) {
-						array_push( $my_markers, $item );
-					} else {
-						array_push( $other_markers, $item );
-					}
+				if ( $marker->post_author == $request->get_param( 'user_id' ) ) {
+					array_push( $my_markers, $item );
+				} else {
+					array_push( $other_markers, $item );
 				}
 			}
 

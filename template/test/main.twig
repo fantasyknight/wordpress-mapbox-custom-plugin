@@ -16,7 +16,7 @@
 	<body>
 		<header></header>
 
-		<main>
+		<main class="agentfire-mapbox">
 			<div class="container">
 				<div class="row">
 					<div class="mapbox-sidebar col-md-3 px-md-3 px-0 mb-md-0 mb-4">
@@ -50,16 +50,17 @@
 				<input class="d-none" id="user-id" value={{userID}}>
 				<input class="d-none" id="api-url" value={{apiURL}}>
 				<input class="d-none" id="map-box-key" value={{mapBoxKey}}>
-
-				<div class="d-flex mb-2 justify-content-between align-items-center">
-					<label class="mb-0">Name</label>
-					<input type="text" required value="My Marker" class="marker-name"/>
-				</div>
+				<input class="d-none" id="nonce" value={{nonce}}>
 
 				<div class="d-flex mb-2 justify-content-between align-items-center">
 					<label class="mb-0">Tag</label>
 
-					<select data-placeholder="Your Favorite Types of Bear" class="chosen-select marker-tag" tabindex="17" id="single-label-example"></select>
+					<select data-placeholder="Your Favorite Types of Bear" multiple class="chosen-select marker-tag" tabindex="17" id="single-label-example"></select>
+				</div>
+
+				<div class="d-flex mb-2 justify-content-between align-items-center">
+					<label class="mb-0">Name</label>
+					<input type="text" required value="My Marker" class="marker-name"/>
 				</div>
 
 				<div class="d-flex mb-2 justify-content-between align-items-center">
@@ -95,7 +96,7 @@
 				</div>
 			</div>
 		</main>
-
+		
 		<script src="{{ asset('js/main.min.js')}} "></script>
 	</body>
-</html></body></html>
+</html>

@@ -1,3 +1,55 @@
+.agentfire-mapbox {
+    #only-mine {
+        height: 1em;
+    }
+
+    .form-control {
+        padding: 6px 12px;
+        border-width: 1px;
+        border-radius: .375rem;
+        line-height: 1.5;
+    }
+
+    .form-switch .form-check-input {
+        height: 25px;
+        background-repeat: no-repeat;
+    }
+
+    .nice-scrollbar {
+        overflow: hidden auto;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        &::-webkit-scrollbar {
+            width: 4px;
+            height: 81px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            position: relative;
+            margin-right: -2rem;
+            background: #ccc;
+            border-radius: 10px;
+            opacity: .15;
+            cursor: pointer;
+            transform: translateX(2rem);
+        }
+    }
+
+    input[type=checkbox]:after {
+        content: none;
+    }
+
+    label {
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+}
+
 .mapboxgl-canvas {
     display: block;
     position: relative;
@@ -47,31 +99,6 @@
 
         .form-check-label {
             font-size: 14px;
-        }
-    }
-
-    .nice-scrollbar {
-        overflow: hidden auto;
-
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        &::-webkit-scrollbar {
-            width: 4px;
-            height: 81px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            position: relative;
-            margin-right: -2rem;
-            background: #ccc;
-            border-radius: 10px;
-            opacity: .15;
-            cursor: pointer;
-            transform: translateX(2rem);
         }
     }
 
@@ -131,6 +158,40 @@
         }
     }
 
+    .chosen-results {
+        height: 8rem;
+    }
+
+    .chosen-choices {
+        max-height: 56px;
+    }
+
+    .chosen-results,
+    .chosen-choices {
+        overflow: hidden auto;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        &::-webkit-scrollbar {
+            width: 4px;
+            height: 81px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            position: relative;
+            margin-right: -2rem;
+            background: #ccc;
+            border-radius: 10px;
+            opacity: .15;
+            cursor: pointer;
+            transform: translateX(2rem);
+        }
+    }
+
     .chosen-container {
         width: 10rem !important;
     }
@@ -145,6 +206,14 @@
         border: 1px solid #aaa;
         border-radius: 5px;
         line-height: 25px;
+    }
+
+    input {
+        padding: 1px 2px;
+    }
+
+    button {
+        padding: 1px 6px;
     }
 }
 

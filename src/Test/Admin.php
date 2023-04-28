@@ -148,7 +148,7 @@ class Admin {
                         'label'             => 'MapBox Token',
                         'name'              => 'mapbox_token',
                         'type'              => 'text'
-                    ],
+                    ]
 				],
 				'location'              => [
 					[
